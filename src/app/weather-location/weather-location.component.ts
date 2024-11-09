@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import {WeatherLocation} from '../weather-location';
 
 @Component({
   selector: 'app-weather-location',
@@ -8,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './weather-location.component.css'
 })
 export class WeatherLocationComponent {
-
+  @Input() weatherLocation!: WeatherLocation; //from angular tutorial
 }

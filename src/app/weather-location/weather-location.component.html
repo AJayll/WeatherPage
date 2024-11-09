@@ -1,1 +1,7 @@
-<p>weather-location works!</p>
+<section class="forecast">
+    <h1 class="forecast-location">{{ weatherLocation.city }}, {{ weatherLocation.state }}</h1>
+    <!--TODO: an img of the type of weather currently rather than a static one-->
+    <img class ="forecast-photo" src="logo.png" alt = "logo" aria-hidden="true" />
+    <h2 class="forecast-heading">{{ weatherLocation.forecast }}</h2>
+    <p class="forecast-details">{{ weatherLocation.temperature }}, {{ weatherLocation.details }}</p> <!--TODO: add a check for celsius flag and show unit for temp accordingly-->
+  </section>
