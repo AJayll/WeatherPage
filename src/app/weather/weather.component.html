@@ -6,5 +6,5 @@
     </form>
   </section>
   <section class = "results">
-    <app-weather-location [weatherLocation] = "weatherLocation"></app-weather-location>
+    <app-weather-location *ngFor = "let weatherLocation of weatherLocationList" [weatherLocation] = "weatherLocation"></app-weather-location>
   </section>
