@@ -59,13 +59,15 @@
 </style>
 
 <main class="main">
-  <header class ="brand-name">
-    <img class ="brand-logo" src="logo.png" alt = "logo" aria-hidden="true" /> <!--Wanted to get images working, placehold-->
-  </header>
+  <a [routerLink]="['/']">
+    <header class="brand-name">
+      <img class="brand-logo" src="logo.png" alt="logo" aria-hidden="true" /> <!--Still placeholder, just added router stuff as per tutorial-->
+    </header>
+  </a>
   <section class="content"> <!--First pass on page opener-->
-    <h1>Welcome, Hello</h1>
-    <h2>Search for a city's current weather:</h2>
-    <app-weather></app-weather>
+    <h1  text-align = "center" >Look up a city's weather!</h1>
+    <h2>City Search:</h2>
+    <router-outlet></router-outlet>
   </section>
 </main>
 <router-outlet />
