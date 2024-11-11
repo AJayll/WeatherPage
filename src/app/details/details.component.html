@@ -1,1 +1,20 @@
-<p>details works!</p>
+<!--Sample code from Angular tutorial-->
+    <article>
+      <!--img  // Not useful in weather app in current form, later add weather icons here instead with some logic
+        class="weather-photo"
+        [src]="housingLocation?.photo"
+        alt="Exterior photo of {{ housingLocation?.name }}"
+        crossorigin
+      /-->
+      <section class="weather-description">
+        <p class="weather-location">{{ weatherLocation?.city }}, {{ weatherLocation?.state }}</p>
+      </section>
+      <section class="weather-features">
+        <h2 class="section-heading">About this city's weather</h2>
+        <ul>
+          <li>Forecast: {{ weatherLocation?.forecast }}</li>
+          <li>Temperature: {{ weatherLocation?.temperature }}</li>
+          <li>Extra info: {{ weatherLocation?.details }}</li>
+        </ul>
+      </section>
+    </article>
