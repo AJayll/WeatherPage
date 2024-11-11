@@ -1,48 +1,31 @@
 import { Injectable } from '@angular/core';
 import {WeatherLocation} from './weather-location';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from "../environments/environment";
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeatherService {
-  weatherLocationList: WeatherLocation[] = [{ //temp static data for tutorial
-      id: 0,
-      temperature: 75,
-      city: 'Tampa',
-      state: 'FL',
-      forecast: "Sunny",
-      details: "Humidity 84%, Wind: 8mph NE",
-      celsius: false,
-    },
-    {
-      id: 1,
-      temperature: 78,
-      city: 'Weston',
-      state: 'FL',
-      forecast: "Cloudy",
-      details: "Humidity 86%, Wind: 4mph NE",
-      celsius: false,
-    },
-    {
-      id: 2,
-      temperature: 78,
-      city: 'Davie',
-      state: 'FL',
-      forecast: "Cloudy",
-      details: "Humidity 86%, Wind: 4mph NE",
-      celsius: false,
-    },
-    {
-      id: 3,
-      temperature: 72,
-      city: 'Naples',
-      state: 'FL',
-      forecast: "Rainy",
-      details: "Humidity 88%, Wind: 6mph NW",
-      celsius: false,
-    },
-  ];
-  constructor() { }
+  private apiUrl = "https://dataservice.accuweather.com";
+
+  //params = HttpParams().set('apikey', environment.accuweatherApiKey)
+
+  weatherLocationList: WeatherLocation[] = [];
+  constructor(private http: HttpClient) {}
+
+  searchCityForecast(city: string): Observable<any> {
+    const params = new HttpParams().set('apikey', environment.accuweatherApiKey).set('q', city); //query for a city and its forecast
+
+    return this.http.get(`${this.apiUrl}/locations/v1/cities/search`, { params }); //to be used in getForecast, if empty or some error tell the user
+  }
+
+  getForecast(locationKey: string): Observable<any> {
+    const params = new HttpParams().set('apikey', environment.accuweatherApiKey); //grab the forecast from the queried city
+    return this.http.get(`${this.apiUrl}/forecasts/v1/daily/1day/${locationKey}`, { params });
+  }
+
   getAllWeatherLocations(): WeatherLocation[] { // 2 getter functions proivided by tutorial
     return this.weatherLocationList;
   }

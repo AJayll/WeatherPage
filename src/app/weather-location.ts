@@ -6,4 +6,5 @@ export interface WeatherLocation {
     state: string;
     details: string; //Extra weather info i.e: humidity, wind direction/speed etc 
     celsius: boolean; 
+    locationKey: string; // For API
 }

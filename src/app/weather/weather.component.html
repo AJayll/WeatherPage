@@ -1,9 +1,12 @@
 <section>
     <form>
-      <input type="text" placeholder="Filter by city" />
-      <button class="primary" type="button">Search</button>
+      <input type="text" placeholder="Filter by city" #filter/>
+      <button class="primary" type="button" (click)="filterResults(filter.value)">Search</button>
     </form>
   </section>
   <section class = "results">
-    <app-weather-location *ngFor = "let weatherLocation of weatherLocationList" [weatherLocation] = "weatherLocation"></app-weather-location>
+    <!--If no results-->
+    <p *ngIf = "filteredLocationList.length == 0">There are no cities matching this name in the database.</p>
+    <!--If there are results-->
+    <app-weather-location *ngFor = "let weatherLocation of filteredLocationList" [weatherLocation] = "weatherLocation"></app-weather-location>
   </section>
