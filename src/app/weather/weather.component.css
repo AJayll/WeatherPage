@@ -21,6 +21,23 @@
     color: white;
     border-radius: 8px;
   }
+
+  .search-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .search-bar input[type="text"] {
+    width: 300px;
+  }
+  /*Just want to center everything in the page*/
+  .results {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   @media (min-width: 500px) and (max-width: 768px) {
     .results {
         grid-template-columns: repeat(2, 1fr);
