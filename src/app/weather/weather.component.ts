@@ -47,22 +47,24 @@ export class WeatherComponent { //Mix of tutorial declarations and declarations 
     var weather: WeatherLocation = this.filteredLocationList[0]; // Artifact of tutorial using lists
     if (this.useCelsius) { // Check if the update is to Celsius vs to Farenheit
       weather.temperature = this.convertToCelsius(weather.temperature);
+      weather.details = `${weather.details.slice(0,1)}C${weather.details.slice(2)}` // Swap the unit of the temp
     } else {
       weather.temperature = this.convertToFahrenheit(weather.temperature);
+      weather.details = `${weather.details.slice(0,1)}F${weather.details.slice(2)}` // Swap the unit of the temp
     }
   }
 
   filterResults(city: string) { // Since we are only taking the first result, want it to be more accurate search
     this.errorMessage = null; // Clear previous error if any
     if (!city) { 
-      this.filteredLocationList = this.weatherLocationList; //If the city is empty; return, usually []
+      this.filteredLocationList = this.weatherLocationList; // If the city is empty; return, usually []
       this.errorMessage = "City search field empty";
       return;
     }
     this.weatherService.searchCityForecast(city).subscribe((response: any[]) => { 
       const filteredResults = response.filter(location => 
         location.LocalizedName.toLowerCase() === city.toLowerCase());
-      if (filteredResults.length > 0){
+      if (filteredResults.length > 0){ // Only want the first city returned by API as per doc requirements
         this.cityResult = {
           city: filteredResults[0].LocalizedName,
           state: filteredResults[0].AdministrativeArea.LocalizedName,
@@ -75,7 +77,7 @@ export class WeatherComponent { //Mix of tutorial declarations and declarations 
       }
       // Using the locationKey from the city query, get all the details of the weather now
       this.weatherService.getForecast(this.cityResult.locationKey).subscribe((forecastResponse: any) => {
-        // Mapping the API response to the WeatherLocation component
+        // Mapping the API response to the WeatherLocation component using safe indexing
         const dailyForecast = forecastResponse?.DailyForecasts?.[0];
         const dayDetails = dailyForecast?.Day;
 
@@ -86,7 +88,8 @@ export class WeatherComponent { //Mix of tutorial declarations and declarations 
             forecast: dayDetails.IconPhrase,
             city: filteredResults[0].LocalizedName,
             state: filteredResults[0].AdministrativeArea.LocalizedName,
-            details: `Humidity: ${dayDetails.Humidity ?? 'N/A'}%, Wind: ${dayDetails.Wind?.Speed?.Value ?? 'N/A'} ${dayDetails.Wind?.Speed?.Unit ?? 'mph'}`,
+            details: `${this.useCelsius ? '°C' : '°F'}, Humidity: ${dayDetails.RelativeHumidity?.Average ?? 'N/A'}%, 
+              Wind: ${dayDetails.Wind?.Speed?.Value ?? 'N/A'} ${dayDetails.Wind?.Speed?.Unit ?? 'mi/h'}`,
             celsius: this.useCelsius,
             locationKey: filteredResults[0].Key
           }];

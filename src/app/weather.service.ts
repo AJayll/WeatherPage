@@ -22,7 +22,7 @@ export class WeatherService {
   }
 
   getForecast(locationKey: string): Observable<any> {
-    const params = new HttpParams().set('apikey', environment.accuweatherApiKey); //grab the forecast from the queried city
+    const params = new HttpParams().set('apikey', environment.accuweatherApiKey).set('details', "true"); //grab the forecast from the queried city
     return this.http.get(`${this.apiUrl}/forecasts/v1/daily/1day/${locationKey}`, { params });
   }
 

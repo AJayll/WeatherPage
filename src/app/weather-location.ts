@@ -1,6 +1,6 @@
 export interface WeatherLocation {
     id: number;
-    temperature: number; // whichever form the api defaults to, TODO
+    temperature: number; // Defaults Farenheit
     forecast: string; // Sunny, cloudy, rainy etc.
     city: string;
     state: string;
