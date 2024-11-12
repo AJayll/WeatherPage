@@ -11,16 +11,45 @@ import { WeatherService } from '../weather.service';
   templateUrl: './weather.component.html',
   styleUrl: './weather.component.css'
 })
+
 export class WeatherComponent { //Mix of tutorial declarations and declarations to help process API in filter Results function
+  
   weatherLocationList: WeatherLocation[] = []; //These are lists from the tutorial, given more time TODO: fix
   filteredLocationList: WeatherLocation[] = [];
+  
   cityResult: {city: string, state: string, locationKey: string} | null = null;
-  errorMessage: string | null = null;  // Solely to update the front-end user
 
+  errorMessage: string | null = null;  // Solely to update the front-end user
+  useCelsius: boolean = false; // Default read is Farenheit
   weatherService: WeatherService = inject(WeatherService);
+
   constructor() {
     this.weatherLocationList = this.weatherService.getAllWeatherLocations();
     this.filteredLocationList = this.weatherLocationList;
+  }
+
+  // Temperature control Helpers
+  convertToCelsius(fahrenheit: number): number {
+    return Math.round(((fahrenheit - 32) * 5) / 9); // Accepting rounding error since temperature range is volatile anyway
+  }
+
+  convertToFahrenheit(celsius: number): number {
+    return Math.round((celsius * 9) / 5 + 32); // Accepting rounding error (Can gain/lose a degree after multiple toggles)
+  }
+  
+  // Actual Temperature function called when button is toggled 
+  toggleTemperatureUnit() {
+    if (this.filteredLocationList.length == 0){
+      console.log("No Locations to change temp");
+      return;
+    }
+    this.useCelsius = !this.useCelsius;
+    var weather: WeatherLocation = this.filteredLocationList[0]; // Artifact of tutorial using lists
+    if (this.useCelsius) { // Check if the update is to Celsius vs to Farenheit
+      weather.temperature = this.convertToCelsius(weather.temperature);
+    } else {
+      weather.temperature = this.convertToFahrenheit(weather.temperature);
+    }
   }
 
   filterResults(city: string) { // Since we are only taking the first result, want it to be more accurate search
@@ -50,15 +79,15 @@ export class WeatherComponent { //Mix of tutorial declarations and declarations 
         const dailyForecast = forecastResponse?.DailyForecasts?.[0];
         const dayDetails = dailyForecast?.Day;
 
-        if (dailyForecast && dayDetails) {
+        if (dailyForecast && dayDetails) { // Check the api returned the bare minimum data
           this.filteredLocationList = [{
             id: 1,
             temperature: (dailyForecast.Temperature.Maximum.Value + dailyForecast.Temperature.Minimum.Value) / 2,
             forecast: dayDetails.IconPhrase,
             city: filteredResults[0].LocalizedName,
             state: filteredResults[0].AdministrativeArea.LocalizedName,
-            details: `Humidity: ${dayDetails.Humidity ?? 'N/A'}%, Wind: ${dayDetails.Wind?.Speed?.Value ?? 'N/A'} km/h`,
-            celsius: false,
+            details: `Humidity: ${dayDetails.Humidity ?? 'N/A'}%, Wind: ${dayDetails.Wind?.Speed?.Value ?? 'N/A'} ${dayDetails.Wind?.Speed?.Unit ?? 'km/h'}`,
+            celsius: this.useCelsius,
             locationKey: filteredResults[0].Key
           }];
         } else {

@@ -30,4 +30,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 via iconfinder - Free Weather icons: https://www.iconfinder.com/weather-icons?price=free
 Accuweather was used for forecasts: http://www.accuweather.com
-To use the search function, put your AccuWeather API key (Free Core weather key was used in this project, unsure if a minutecast key will work without error)
+To use the search function, put your AccuWeather API key (Free Core weather key was used in this project)

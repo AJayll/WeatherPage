@@ -4,6 +4,10 @@
       <!--input type="text" placeholder="Filter by state" #stateFilter/      had some ideas to add state as another filter option-->
       <button class="primary" type="button" (click)="filterResults(cityFilter.value)">Search</button>
     </form>
+    <!-- Toggle Button for Celsius/Fahrenheit -->
+    <button class="toggle-button" (click)="toggleTemperatureUnit()">
+      Show in {{ useCelsius ? 'Fahrenheit' : 'Celsius' }}
+    </button>
   </section>
   <section class = "results">
     <!--Display an error if it exists: -->
