@@ -86,7 +86,7 @@ export class WeatherComponent { //Mix of tutorial declarations and declarations 
             forecast: dayDetails.IconPhrase,
             city: filteredResults[0].LocalizedName,
             state: filteredResults[0].AdministrativeArea.LocalizedName,
-            details: `Humidity: ${dayDetails.Humidity ?? 'N/A'}%, Wind: ${dayDetails.Wind?.Speed?.Value ?? 'N/A'} ${dayDetails.Wind?.Speed?.Unit ?? 'km/h'}`,
+            details: `Humidity: ${dayDetails.Humidity ?? 'N/A'}%, Wind: ${dayDetails.Wind?.Speed?.Value ?? 'N/A'} ${dayDetails.Wind?.Speed?.Unit ?? 'mph'}`,
             celsius: this.useCelsius,
             locationKey: filteredResults[0].Key
           }];

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {WeatherLocation} from './weather-location';
+import { WeatherLocation } from './weather-location';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from "../environments/environment";
 import { Observable } from 'rxjs';
@@ -13,7 +13,6 @@ export class WeatherService {
   //params = HttpParams().set('apikey', environment.accuweatherApiKey)
 
   weatherLocationList: WeatherLocation[] = [];
-  // constructor() { }
   constructor(private http: HttpClient) {}
 
   searchCityForecast(city: string): Observable<any> {

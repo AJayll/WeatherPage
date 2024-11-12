@@ -4,16 +4,20 @@
       <!--input type="text" placeholder="Filter by state" #stateFilter/      had some ideas to add state as another filter option-->
       <button class="primary" type="button" (click)="filterResults(cityFilter.value)">Search</button>
     </form>
+
     <!-- Toggle Button for Celsius/Fahrenheit -->
     <button class="toggle-button" (click)="toggleTemperatureUnit()">
       Show in {{ useCelsius ? 'Fahrenheit' : 'Celsius' }}
     </button>
   </section>
+  
   <section class = "results">
     <!--Display an error if it exists: -->
     <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
     <!--Starting message-->
     <p *ngIf = "!errorMessage && filteredLocationList.length == 0">Search a city to get started!.</p>
+
     <!--If there are results-->
     <app-weather-location *ngFor = "let weatherLocation of filteredLocationList" [weatherLocation] = "weatherLocation"></app-weather-location>
   </section>
