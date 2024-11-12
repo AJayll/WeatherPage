@@ -13,10 +13,11 @@ export class WeatherService {
   //params = HttpParams().set('apikey', environment.accuweatherApiKey)
 
   weatherLocationList: WeatherLocation[] = [];
+  // constructor() { }
   constructor(private http: HttpClient) {}
 
   searchCityForecast(city: string): Observable<any> {
-    const params = new HttpParams().set('apikey', environment.accuweatherApiKey).set('q', city); //query for a city and its forecast
+    const params = new HttpParams().set('apikey', environment.accuweatherApiKey).set('q', city); //query for a city
 
     return this.http.get(`${this.apiUrl}/locations/v1/cities/search`, { params }); //to be used in getForecast, if empty or some error tell the user
   }

@@ -1,12 +1,15 @@
 <section>
     <form>
-      <input type="text" placeholder="Filter by city" #filter/>
-      <button class="primary" type="button" (click)="filterResults(filter.value)">Search</button>
+      <input type="text" placeholder="Filter by city" #cityFilter/>
+      <!--input type="text" placeholder="Filter by state" #stateFilter/      had some ideas to add state as another filter option-->
+      <button class="primary" type="button" (click)="filterResults(cityFilter.value)">Search</button>
     </form>
   </section>
   <section class = "results">
-    <!--If no results-->
-    <p *ngIf = "filteredLocationList.length == 0">There are no cities matching this name in the database.</p>
+    <!--Display an error if it exists: -->
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+    <!--Starting message-->
+    <p *ngIf = "!errorMessage && filteredLocationList.length == 0">Search a city to get started!.</p>
     <!--If there are results-->
     <app-weather-location *ngFor = "let weatherLocation of filteredLocationList" [weatherLocation] = "weatherLocation"></app-weather-location>
   </section>

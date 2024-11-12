@@ -11,33 +11,69 @@ import { WeatherService } from '../weather.service';
   templateUrl: './weather.component.html',
   styleUrl: './weather.component.css'
 })
-export class WeatherComponent {
-  //Temp data, eventually pull cities (city?) from API with input being from the search bar
-  weatherLocationList: WeatherLocation[] = [];
+export class WeatherComponent { //Mix of tutorial declarations and declarations to help process API in filter Results function
+  weatherLocationList: WeatherLocation[] = []; //These are lists from the tutorial, given more time TODO: fix
   filteredLocationList: WeatherLocation[] = [];
+  cityResult: {city: string, state: string, locationKey: string} | null = null;
+  errorMessage: string | null = null;  // Solely to update the front-end user
+
   weatherService: WeatherService = inject(WeatherService);
   constructor() {
     this.weatherLocationList = this.weatherService.getAllWeatherLocations();
     this.filteredLocationList = this.weatherLocationList;
   }
 
-  filterResults(city: string) { //tutorial search function
-    if (!city) { //If empty go back to original data, not very applicable in final product
-      this.filteredLocationList = this.weatherLocationList;
+  filterResults(city: string) { // Since we are only taking the first result, want it to be more accurate search
+    this.errorMessage = null; // Clear previous error if any
+    if (!city) { 
+      this.filteredLocationList = this.weatherLocationList; //If the city is empty; return, usually []
+      this.errorMessage = "City search field empty";
       return;
     }
-    this.weatherService.searchCityForecast(city).subscribe((response: any) => {
-      this.filteredLocationList = response.map((location: any) => ({
-        city: location.LocalizedName,
-        state: location.AdministrativeArea.LocalizedName,
-        locationKey: location.Key
-      }));
-    });
-  }
-  //   this.filteredLocationList = this.weatherLocationList.filter((weatherLocation) =>
-  //     weatherLocation?.city.toLowerCase().includes(text.toLowerCase()),
-  //   );
-  // }
+    this.weatherService.searchCityForecast(city).subscribe((response: any[]) => { 
+      const filteredResults = response.filter(location => 
+        location.LocalizedName.toLowerCase() === city.toLowerCase());
+      if (filteredResults.length > 0){
+        this.cityResult = {
+          city: filteredResults[0].LocalizedName,
+          state: filteredResults[0].AdministrativeArea.LocalizedName,
+          locationKey: filteredResults[0].Key
+        }
+      } else {
+        this.errorMessage = "City not found or Invalid City name";
+        this.filteredLocationList = [];
+        return;
+      }
+      // Using the locationKey from the city query, get all the details of the weather now
+      this.weatherService.getForecast(this.cityResult.locationKey).subscribe((forecastResponse: any) => {
+        // Mapping the API response to the WeatherLocation component
+        const dailyForecast = forecastResponse?.DailyForecasts?.[0];
+        const dayDetails = dailyForecast?.Day;
+
+        if (dailyForecast && dayDetails) {
+          this.filteredLocationList = [{
+            id: 1,
+            temperature: (dailyForecast.Temperature.Maximum.Value + dailyForecast.Temperature.Minimum.Value) / 2,
+            forecast: dayDetails.IconPhrase,
+            city: filteredResults[0].LocalizedName,
+            state: filteredResults[0].AdministrativeArea.LocalizedName,
+            details: `Humidity: ${dayDetails.Humidity ?? 'N/A'}%, Wind: ${dayDetails.Wind?.Speed?.Value ?? 'N/A'} km/h`,
+            celsius: false,
+            locationKey: filteredResults[0].Key
+          }];
+        } else {
+          this.errorMessage = "Massively incomplete forecast data, Sorry!";
+          this.filteredLocationList = [];
+        }
+      }, (error) => { 
+          this.errorMessage = "Error fetching data for the city";
+          this.filteredLocationList = []; //Clear previous result
+        }
+      );
+    }
+  );
+}
+
   getForecast(locationKey: string) {
     this.weatherService.getForecast(locationKey).subscribe((forecastData: any) => {
       console.log(forecastData);
