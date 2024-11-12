@@ -30,4 +30,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 via iconfinder - Free Weather icons: https://www.iconfinder.com/weather-icons?price=free
 Accuweather was used for forecasts: http://www.accuweather.com
+
+## HOW TO RUN
+Run the dev server using ng serve --open (nvm 18 was used for this project, though higher even versions should also work), it will open on localhost:4200 as its a default angular dev server
 To use the search function, put your AccuWeather API key (Free Core weather key was used in this project)
